@@ -394,5 +394,44 @@ document.addEventListener('DOMContentLoaded',function(){
   });}
 });
 </script>
+
+<script>
+  document.getElementById('rsvp').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const form = e.target;
+    const btn = form.querySelector('button');
+    const originalBtnText = btn.innerHTML;
+    
+    btn.innerHTML = 'Procesando...';
+    btn.disabled = true;
+
+    const data = {
+      name: form.name.value,
+      email: form.email.value
+    };
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        form.parentElement.classList.add('done');
+      } else {
+        alert('Ocurrió un error. Intenta nuevamente.');
+        btn.innerHTML = originalBtnText;
+        btn.disabled = false;
+      }
+    } catch (error) {
+      alert('Ocurrió un error. Intenta nuevamente.');
+      btn.innerHTML = originalBtnText;
+      btn.disabled = false;
+    }
+  });
+</script>
+
 </body>
 </html>
